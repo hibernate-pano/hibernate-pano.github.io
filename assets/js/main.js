@@ -85,7 +85,25 @@ function initializeScrollEffects() {
         window.addEventListener('scroll', function () {
             const scrolled = window.pageYOffset;
             const opacity = Math.min(scrolled / 100, 0.95);
-            header.style.backgroundColor = `rgba(13, 17, 23, ${0.8 + opacity * 0.2})`;
+
+            // Use CSS variable instead of hardcoded color
+            const computedStyle = getComputedStyle(document.documentElement);
+            const bgColor = computedStyle.getPropertyValue('--background-color').trim();
+
+            // Parse RGB values from the background color
+            let r, g, b;
+            if (bgColor.startsWith('#')) {
+                // Handle hex colors
+                const hex = bgColor.substring(1);
+                r = parseInt(hex.substring(0, 2), 16);
+                g = parseInt(hex.substring(2, 4), 16);
+                b = parseInt(hex.substring(4, 6), 16);
+            } else {
+                // Default to dark theme colors if parsing fails
+                r = 13; g = 17; b = 23;
+            }
+
+            header.style.backgroundColor = `rgba(${r}, ${g}, ${b}, ${0.8 + opacity * 0.2})`;
         });
     }
 }
@@ -288,35 +306,47 @@ function showNotification(message, type = 'info') {
  * Initialize theme toggle functionality
  */
 function initializeThemeToggle() {
-    // Theme manager is already initialized globally in theme.js
-    // This function can be used for additional theme-related setup
+    // Wait for theme manager to be available
+    const waitForThemeManager = () => {
+        if (window.themeManager) {
+            // Listen for theme changes to update any theme-dependent elements
+            window.themeManager.onThemeChange((event) => {
+                const { theme, isLight } = event.detail;
 
-    // Listen for theme changes to update any theme-dependent elements
-    if (window.themeManager) {
-        window.themeManager.onThemeChange((event) => {
-            const { theme, isLight } = event.detail;
+                // Update any theme-dependent elements here
+                updateThemeDependentElements(theme);
 
-            // Update any theme-dependent elements here
-            updateThemeDependentElements(theme);
+                // Log theme change for debugging
+                console.log(`Theme changed to: ${theme}`);
+            });
 
-            // Log theme change for debugging
-            console.log(`Theme changed to: ${theme}`);
-        });
-    }
+            console.log('Theme toggle functionality initialized');
+        } else {
+            // Retry after a short delay
+            setTimeout(waitForThemeManager, 50);
+        }
+    };
+
+    waitForThemeManager();
 }
 
 /**
  * Update elements that depend on the current theme
  */
 function updateThemeDependentElements(theme) {
-    // Update header background opacity based on theme
+    // Force update header background to use current theme colors
     const header = document.querySelector('.header');
     if (header) {
-        // This is handled by CSS variables now, but we can add additional logic here if needed
+        // Clear any inline styles that might override CSS variables
+        header.style.backgroundColor = '';
+
+        // Re-trigger scroll event to update header background with correct colors
+        const scrollEvent = new Event('scroll');
+        window.dispatchEvent(scrollEvent);
     }
 
     // Update any other theme-dependent elements
-    // For example, update third-party components that don't automatically adapt
+    console.log(`Updated theme-dependent elements for ${theme} theme`);
 }
 
 // Initialize image error handling when DOM is loaded

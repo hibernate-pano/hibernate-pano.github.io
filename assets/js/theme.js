@@ -8,6 +8,11 @@ class ThemeManager {
         this.storageKey = 'sophia-portfolio-theme';
         this.currentTheme = 'dark'; // default theme
         this.themeButton = null;
+        this.isInitialized = false;
+
+        // Bind methods to preserve context
+        this.handleThemeToggle = this.handleThemeToggle.bind(this);
+        this.handleDOMContentLoaded = this.handleDOMContentLoaded.bind(this);
 
         this.init();
     }
@@ -16,21 +21,37 @@ class ThemeManager {
      * Initialize theme manager
      */
     init() {
-        // Load saved theme or detect system preference
-        this.loadTheme();
+        try {
+            // Load saved theme or detect system preference
+            this.loadTheme();
 
-        // Apply theme immediately
-        this.applyTheme();
+            // Apply theme immediately
+            this.applyTheme();
 
-        // Set up theme button when DOM is ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.setupThemeButton());
-        } else {
-            this.setupThemeButton();
+            // Set up theme button when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', this.handleDOMContentLoaded);
+            } else {
+                this.setupThemeButton();
+            }
+
+            // Listen for system theme changes
+            this.setupSystemThemeListener();
+
+            this.isInitialized = true;
+            console.log('ThemeManager initialized successfully');
+        } catch (error) {
+            console.error('Failed to initialize ThemeManager:', error);
         }
+    }
 
-        // Listen for system theme changes
-        this.setupSystemThemeListener();
+    /**
+     * Handle DOM content loaded event
+     */
+    handleDOMContentLoaded() {
+        this.setupThemeButton();
+        // Remove the event listener after setup
+        document.removeEventListener('DOMContentLoaded', this.handleDOMContentLoaded);
     }
 
     /**
@@ -55,19 +76,45 @@ class ThemeManager {
      * Apply current theme to the document
      */
     applyTheme() {
-        const body = document.body;
+        try {
+            const body = document.body;
 
-        if (this.currentTheme === 'light') {
-            body.classList.add('light-theme');
-        } else {
-            body.classList.remove('light-theme');
+            if (!body) {
+                console.warn('Document body not available, retrying...');
+                setTimeout(() => this.applyTheme(), 50);
+                return;
+            }
+
+            if (this.currentTheme === 'light') {
+                body.classList.add('light-theme');
+            } else {
+                body.classList.remove('light-theme');
+            }
+
+            // Update theme button icon if it exists
+            this.updateThemeButtonIcon();
+
+            // Dispatch theme change event
+            this.dispatchThemeChangeEvent();
+
+            console.log('Theme applied:', this.currentTheme);
+        } catch (error) {
+            console.error('Failed to apply theme:', error);
         }
+    }
 
-        // Update theme button icon if it exists
-        this.updateThemeButtonIcon();
-
-        // Dispatch theme change event
-        this.dispatchThemeChangeEvent();
+    /**
+     * Handle theme toggle button click
+     */
+    handleThemeToggle(event) {
+        try {
+            event.preventDefault();
+            event.stopPropagation();
+            this.toggleTheme();
+            console.log('Theme toggled to:', this.currentTheme);
+        } catch (error) {
+            console.error('Failed to toggle theme:', error);
+        }
     }
 
     /**
@@ -113,11 +160,35 @@ class ThemeManager {
      * Setup theme toggle button
      */
     setupThemeButton() {
-        this.themeButton = document.querySelector('.theme-toggle-button');
+        try {
+            // Try multiple selectors to find the theme button
+            this.themeButton = document.querySelector('.theme-toggle-button') ||
+                document.querySelector('[aria-label*="theme"]') ||
+                document.querySelector('button[class*="theme"]');
 
-        if (this.themeButton) {
-            this.themeButton.addEventListener('click', () => this.toggleTheme());
-            this.updateThemeButtonIcon();
+            if (this.themeButton) {
+                // Remove any existing event listeners
+                this.themeButton.removeEventListener('click', this.handleThemeToggle);
+
+                // Add new event listener
+                this.themeButton.addEventListener('click', this.handleThemeToggle);
+
+                // Update button appearance
+                this.updateThemeButtonIcon();
+
+                console.log('Theme button setup successfully');
+            } else {
+                console.warn('Theme toggle button not found in DOM');
+
+                // Retry after a short delay
+                setTimeout(() => {
+                    if (!this.themeButton) {
+                        this.setupThemeButton();
+                    }
+                }, 100);
+            }
+        } catch (error) {
+            console.error('Failed to setup theme button:', error);
         }
     }
 
@@ -213,8 +284,33 @@ class ThemeManager {
     }
 }
 
-// Create global theme manager instance
-window.themeManager = new ThemeManager();
+// Initialize theme manager safely
+function initializeThemeManager() {
+    try {
+        if (!window.themeManager) {
+            window.themeManager = new ThemeManager();
+            console.log('Global ThemeManager created');
+        }
+    } catch (error) {
+        console.error('Failed to create ThemeManager:', error);
+        // Retry after a short delay
+        setTimeout(initializeThemeManager, 100);
+    }
+}
+
+// Initialize immediately if possible, otherwise wait for DOM
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeThemeManager);
+} else {
+    initializeThemeManager();
+}
+
+// Also ensure initialization on window load as fallback
+window.addEventListener('load', () => {
+    if (!window.themeManager) {
+        initializeThemeManager();
+    }
+});
 
 // Export for module systems
 if (typeof module !== 'undefined' && module.exports) {
