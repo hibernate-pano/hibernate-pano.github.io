@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
     initializeScrollEffects();
     initializeSearchFunctionality();
     initializeLanguageSwitcher();
+    initializeThemeToggle();
 });
 
 /**
@@ -281,6 +282,41 @@ function showNotification(message, type = 'info') {
             document.body.removeChild(notification);
         }, 300);
     }, 3000);
+}
+
+/**
+ * Initialize theme toggle functionality
+ */
+function initializeThemeToggle() {
+    // Theme manager is already initialized globally in theme.js
+    // This function can be used for additional theme-related setup
+
+    // Listen for theme changes to update any theme-dependent elements
+    if (window.themeManager) {
+        window.themeManager.onThemeChange((event) => {
+            const { theme, isLight } = event.detail;
+
+            // Update any theme-dependent elements here
+            updateThemeDependentElements(theme);
+
+            // Log theme change for debugging
+            console.log(`Theme changed to: ${theme}`);
+        });
+    }
+}
+
+/**
+ * Update elements that depend on the current theme
+ */
+function updateThemeDependentElements(theme) {
+    // Update header background opacity based on theme
+    const header = document.querySelector('.header');
+    if (header) {
+        // This is handled by CSS variables now, but we can add additional logic here if needed
+    }
+
+    // Update any other theme-dependent elements
+    // For example, update third-party components that don't automatically adapt
 }
 
 // Initialize image error handling when DOM is loaded
