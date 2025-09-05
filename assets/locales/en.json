@@ -152,5 +152,26 @@
     "currentLanguage": "Current language: English",
     "switchToZh": "Switch to Chinese",
     "switchToEn": "Switch to English"
+  },
+  "test": {
+    "pageTitle": "I18n Test",
+    "mainTitle": "I18n System Test Page",
+    "statusTitle": "I18n Status",
+    "systemStatus": "I18n System: Not loaded",
+    "buttonsStatus": "Language Buttons: Not found",
+    "currentLang": "Current Language: Unknown",
+    "controlsTitle": "Test Controls",
+    "runDebug": "Run Debug Check",
+    "switchToChinese": "Switch to Chinese",
+    "switchToEnglish": "Switch to English",
+    "testButton": "Test Button Click",
+    "reinitialize": "Reinitialize",
+    "demoTitle": "Translation Demo",
+    "demoDescription": "These elements should change language when you switch languages.",
+    "consoleTitle": "Console Output",
+    "consoleDescription": "Check the browser console (F12) for detailed debug information. The debug helper will automatically run checks when the page loads.",
+    "waitingOutput": "Waiting for debug output...",
+    "debugPanel": "Debug Panel",
+    "loading": "Loading..."
   }
 }

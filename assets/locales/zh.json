@@ -152,5 +152,26 @@
     "currentLanguage": "当前语言：中文",
     "switchToZh": "切换到中文",
     "switchToEn": "切换到英文"
+  },
+  "test": {
+    "pageTitle": "国际化测试",
+    "mainTitle": "国际化系统测试页面",
+    "statusTitle": "国际化状态",
+    "systemStatus": "国际化系统：未加载",
+    "buttonsStatus": "语言按钮：未找到",
+    "currentLang": "当前语言：未知",
+    "controlsTitle": "测试控制",
+    "runDebug": "运行调试检查",
+    "switchToChinese": "切换到中文",
+    "switchToEnglish": "切换到英文",
+    "testButton": "测试按钮点击",
+    "reinitialize": "重新初始化",
+    "demoTitle": "翻译演示",
+    "demoDescription": "当您切换语言时，这些元素应该会改变语言。",
+    "consoleTitle": "控制台输出",
+    "consoleDescription": "查看浏览器控制台（F12）获取详细的调试信息。调试助手会在页面加载时自动运行检查。",
+    "waitingOutput": "等待调试输出...",
+    "debugPanel": "调试面板",
+    "loading": "加载中..."
   }
 }

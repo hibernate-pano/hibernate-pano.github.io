@@ -127,18 +127,23 @@ function initializeSearchFunctionality() {
  * Initialize language switcher
  */
 function initializeLanguageSwitcher() {
-    const languageButtons = document.querySelectorAll('.language-btn');
+    // Wait for i18n system to be available
+    const waitForI18n = () => {
+        if (window.i18n && window.i18n.isReady && window.i18n.isReady()) {
+            // I18n system handles its own button setup now
+            console.log('Language switcher functionality initialized');
+        } else if (window.i18n) {
+            // Wait for i18n to be ready
+            window.i18n.waitForReady().then(() => {
+                console.log('Language switcher functionality initialized (after wait)');
+            });
+        } else {
+            // Retry after a short delay
+            setTimeout(waitForI18n, 50);
+        }
+    };
 
-    languageButtons.forEach(button => {
-        button.addEventListener('click', function (e) {
-            e.preventDefault();
-            const targetLanguage = this.getAttribute('data-lang');
-
-            if (window.i18n && targetLanguage) {
-                window.i18n.changeLanguage(targetLanguage);
-            }
-        });
-    });
+    waitForI18n();
 }
 
 /**
