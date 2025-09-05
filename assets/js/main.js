@@ -4,11 +4,12 @@
  */
 
 // DOM Content Loaded Event
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeNavigation();
     initializeMobileMenu();
     initializeScrollEffects();
     initializeSearchFunctionality();
+    initializeLanguageSwitcher();
 });
 
 /**
@@ -17,10 +18,10 @@ document.addEventListener('DOMContentLoaded', function() {
 function initializeNavigation() {
     const currentPath = window.location.pathname;
     const navLinks = document.querySelectorAll('.nav-link');
-    
+
     navLinks.forEach(link => {
         const href = link.getAttribute('href');
-        
+
         // Handle home page
         if (currentPath === '/' || currentPath === '/index.html') {
             if (href === '/' || href === '/index.html' || href.startsWith('#')) {
@@ -40,14 +41,14 @@ function initializeNavigation() {
 function initializeMobileMenu() {
     const mobileMenuButton = document.querySelector('.mobile-menu-button');
     const navMenu = document.querySelector('.nav-menu');
-    
+
     if (mobileMenuButton && navMenu) {
-        mobileMenuButton.addEventListener('click', function() {
+        mobileMenuButton.addEventListener('click', function () {
             navMenu.classList.toggle('show-mobile');
         });
-        
+
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
+        document.addEventListener('click', function (event) {
             if (!mobileMenuButton.contains(event.target) && !navMenu.contains(event.target)) {
                 navMenu.classList.remove('show-mobile');
             }
@@ -61,12 +62,12 @@ function initializeMobileMenu() {
 function initializeScrollEffects() {
     // Smooth scrolling for anchor links
     const anchorLinks = document.querySelectorAll('a[href^="#"]');
-    
+
     anchorLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
+        link.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href').substring(1);
             const targetElement = document.getElementById(targetId);
-            
+
             if (targetElement) {
                 e.preventDefault();
                 targetElement.scrollIntoView({
@@ -76,11 +77,11 @@ function initializeScrollEffects() {
             }
         });
     });
-    
+
     // Header background opacity on scroll
     const header = document.querySelector('.header');
     if (header) {
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', function () {
             const scrolled = window.pageYOffset;
             const opacity = Math.min(scrolled / 100, 0.95);
             header.style.backgroundColor = `rgba(13, 17, 23, ${0.8 + opacity * 0.2})`;
@@ -93,9 +94,9 @@ function initializeScrollEffects() {
  */
 function initializeSearchFunctionality() {
     const searchButton = document.querySelector('.search-button');
-    
+
     if (searchButton) {
-        searchButton.addEventListener('click', function() {
+        searchButton.addEventListener('click', function () {
             // Placeholder for search functionality
             console.log('Search functionality to be implemented');
             // You can implement a search modal or redirect to search page
@@ -104,19 +105,37 @@ function initializeSearchFunctionality() {
 }
 
 /**
+ * Initialize language switcher
+ */
+function initializeLanguageSwitcher() {
+    const languageButtons = document.querySelectorAll('.language-btn');
+
+    languageButtons.forEach(button => {
+        button.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetLanguage = this.getAttribute('data-lang');
+
+            if (window.i18n && targetLanguage) {
+                window.i18n.changeLanguage(targetLanguage);
+            }
+        });
+    });
+}
+
+/**
  * Utility function to create breadcrumb navigation
  */
 function createBreadcrumb(items) {
     const breadcrumbContainer = document.querySelector('.breadcrumb-container');
-    
+
     if (!breadcrumbContainer || !items || items.length === 0) {
         return;
     }
-    
+
     const breadcrumb = document.createElement('nav');
     breadcrumb.className = 'breadcrumb';
     breadcrumb.setAttribute('aria-label', 'Breadcrumb');
-    
+
     items.forEach((item, index) => {
         if (index > 0) {
             const separator = document.createElement('span');
@@ -124,7 +143,7 @@ function createBreadcrumb(items) {
             separator.textContent = '/';
             breadcrumb.appendChild(separator);
         }
-        
+
         if (index === items.length - 1) {
             // Current page
             const current = document.createElement('span');
@@ -140,7 +159,7 @@ function createBreadcrumb(items) {
             breadcrumb.appendChild(link);
         }
     });
-    
+
     breadcrumbContainer.appendChild(breadcrumb);
 }
 
@@ -148,10 +167,10 @@ function createBreadcrumb(items) {
  * Utility function to format dates
  */
 function formatDate(dateString) {
-    const options = { 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
     };
     return new Date(dateString).toLocaleDateString('en-US', options);
 }
@@ -171,7 +190,7 @@ function truncateText(text, maxLength) {
  */
 function handleImageError(img) {
     img.style.display = 'none';
-    
+
     // Create placeholder
     const placeholder = document.createElement('div');
     placeholder.className = 'image-placeholder';
@@ -186,7 +205,7 @@ function handleImageError(img) {
         font-size: 0.875rem;
     `;
     placeholder.textContent = 'Image not available';
-    
+
     img.parentNode.insertBefore(placeholder, img);
 }
 
@@ -195,9 +214,9 @@ function handleImageError(img) {
  */
 function initializeImageErrorHandling() {
     const images = document.querySelectorAll('img');
-    
+
     images.forEach(img => {
-        img.addEventListener('error', function() {
+        img.addEventListener('error', function () {
             handleImageError(this);
         });
     });
@@ -247,14 +266,14 @@ function showNotification(message, type = 'info') {
         transition: transform 0.3s ease;
     `;
     notification.textContent = message;
-    
+
     document.body.appendChild(notification);
-    
+
     // Animate in
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 100);
-    
+
     // Remove after 3 seconds
     setTimeout(() => {
         notification.style.transform = 'translateX(100%)';
