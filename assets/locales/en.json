@@ -34,7 +34,12 @@
       "category": "Web Application",
       "completedIn": "Completed in 2024",
       "fullDescription": "A comprehensive task and project management web application designed to streamline team collaboration and boost productivity. Built with modern web technologies and featuring an intuitive user interface.",
-      "technologies": ["React", "Node.js", "MongoDB", "Socket.io"],
+      "technologies": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Socket.io"
+      ],
       "features": [
         "Real-time collaboration",
         "Task management",
@@ -53,7 +58,12 @@
       "category": "Mobile Application",
       "completedIn": "In Development",
       "fullDescription": "A cross-platform mobile application for fitness tracking and goal setting, built with React Native and featuring offline sync capabilities.",
-      "technologies": ["React Native", "Firebase", "Redux", "AsyncStorage"]
+      "technologies": [
+        "React Native",
+        "Firebase",
+        "Redux",
+        "AsyncStorage"
+      ]
     },
     "dataInsightsDashboard": {
       "title": "Data Insights Dashboard",
@@ -61,7 +71,12 @@
       "category": "Data Visualization",
       "completedIn": "Completed in 2023",
       "fullDescription": "An interactive dashboard for visualizing business metrics and KPIs, built with modern data visualization libraries.",
-      "technologies": ["D3.js", "React", "Python", "PostgreSQL"]
+      "technologies": [
+        "D3.js",
+        "React",
+        "Python",
+        "PostgreSQL"
+      ]
     },
     "relatedProjects": "Related Projects"
   },
@@ -114,5 +129,28 @@
   },
   "footer": {
     "copyright": "© 2024 Sophia Chen. All Rights Reserved."
+  },
+  "meta": {
+    "homeDescription": "Sophia Chen's tech portfolio showcasing software engineering projects, articles, and videos about web development and modern technologies.",
+    "aboutDescription": "Learn more about Sophia Chen, a passionate software engineer specializing in web development, with expertise in React, Node.js, and modern web technologies.",
+    "projectsDescription": "Explore my portfolio of software development projects, from web applications to mobile apps and data visualization tools.",
+    "articlesDescription": "Read my latest articles about software development, web technologies, and programming best practices.",
+    "videosDescription": "Watch my video tutorials and vlogs about software engineering, coding, and tech industry insights.",
+    "contactDescription": "Get in touch with Sophia Chen for collaboration opportunities, project inquiries, or just to connect and discuss technology."
+  },
+  "loading": {
+    "text": "Loading...",
+    "translating": "Translating page..."
+  },
+  "errors": {
+    "translationFailed": "Failed to load translations",
+    "networkError": "Network error occurred",
+    "tryAgain": "Please try again"
+  },
+  "accessibility": {
+    "languageSwitcher": "Language switcher",
+    "currentLanguage": "Current language: English",
+    "switchToZh": "Switch to Chinese",
+    "switchToEn": "Switch to English"
   }
 }

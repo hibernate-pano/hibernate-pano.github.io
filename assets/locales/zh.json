@@ -34,7 +34,12 @@
       "category": "Web应用程序",
       "completedIn": "2024年完成",
       "fullDescription": "一个全面的任务和项目管理Web应用程序，旨在简化团队协作并提高生产力。采用现代Web技术构建，具有直观的用户界面。",
-      "technologies": ["React", "Node.js", "MongoDB", "Socket.io"],
+      "technologies": [
+        "React",
+        "Node.js",
+        "MongoDB",
+        "Socket.io"
+      ],
       "features": [
         "实时协作",
         "任务管理",
@@ -53,7 +58,12 @@
       "category": "移动应用程序",
       "completedIn": "开发中",
       "fullDescription": "一个跨平台的健身跟踪和目标设定移动应用程序，使用React Native构建，具有离线同步功能。",
-      "technologies": ["React Native", "Firebase", "Redux", "AsyncStorage"]
+      "technologies": [
+        "React Native",
+        "Firebase",
+        "Redux",
+        "AsyncStorage"
+      ]
     },
     "dataInsightsDashboard": {
       "title": "数据洞察仪表板",
@@ -61,7 +71,12 @@
       "category": "数据可视化",
       "completedIn": "2023年完成",
       "fullDescription": "一个用于可视化业务指标和KPI的交互式仪表板，使用现代数据可视化库构建。",
-      "technologies": ["D3.js", "React", "Python", "PostgreSQL"]
+      "technologies": [
+        "D3.js",
+        "React",
+        "Python",
+        "PostgreSQL"
+      ]
     },
     "relatedProjects": "相关项目"
   },
@@ -114,5 +129,28 @@
   },
   "footer": {
     "copyright": "© 2024 Sophia Chen. 版权所有。"
+  },
+  "meta": {
+    "homeDescription": "Sophia Chen的技术作品集，展示软件工程项目、关于Web开发和现代技术的文章和视频。",
+    "aboutDescription": "了解更多关于Sophia Chen的信息，她是一位热衷于Web开发的软件工程师，在React、Node.js和现代Web技术方面拥有专业知识。",
+    "projectsDescription": "探索我的软件开发项目组合，从Web应用程序到移动应用和数据可视化工具。",
+    "articlesDescription": "阅读我关于软件开发、Web技术和编程最佳实践的最新文章。",
+    "videosDescription": "观看我关于软件工程、编程和技术行业见解的视频教程和视频博客。",
+    "contactDescription": "联系Sophia Chen进行合作机会、项目咨询，或只是想联系和讨论技术。"
+  },
+  "loading": {
+    "text": "加载中...",
+    "translating": "正在翻译页面..."
+  },
+  "errors": {
+    "translationFailed": "翻译加载失败",
+    "networkError": "网络错误",
+    "tryAgain": "请重试"
+  },
+  "accessibility": {
+    "languageSwitcher": "语言切换器",
+    "currentLanguage": "当前语言：中文",
+    "switchToZh": "切换到中文",
+    "switchToEn": "切换到英文"
   }
 }

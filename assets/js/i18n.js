@@ -9,12 +9,35 @@ class I18n {
         this.translations = {};
         this.fallbackLanguage = 'en';
         this.storageKey = 'sophia-portfolio-language';
+        this.isLoading = false;
+        this.isInitialized = false;
+        this.loadingPromise = null;
 
         // Initialize
         this.init();
     }
 
     async init() {
+        if (this.isInitialized || this.isLoading) {
+            return this.loadingPromise;
+        }
+
+        this.isLoading = true;
+        this.loadingPromise = this._performInit();
+
+        try {
+            await this.loadingPromise;
+            this.isInitialized = true;
+        } catch (error) {
+            console.error('Failed to initialize i18n:', error);
+        } finally {
+            this.isLoading = false;
+        }
+
+        return this.loadingPromise;
+    }
+
+    async _performInit() {
         // Load saved language preference
         const savedLanguage = localStorage.getItem(this.storageKey);
         if (savedLanguage && ['en', 'zh'].includes(savedLanguage)) {
@@ -35,6 +58,11 @@ class I18n {
 
         // Update language selector
         this.updateLanguageSelector();
+
+        // Dispatch initialization complete event
+        window.dispatchEvent(new CustomEvent('i18nInitialized', {
+            detail: { language: this.currentLanguage }
+        }));
     }
 
     async loadTranslations() {
@@ -46,6 +74,8 @@ class I18n {
             const response = await fetch(`${basePath}assets/locales/${this.currentLanguage}.json`);
             if (response.ok) {
                 this.translations[this.currentLanguage] = await response.json();
+            } else {
+                throw new Error(`Failed to load ${this.currentLanguage} translations: ${response.status}`);
             }
 
             // Load fallback language if different
@@ -53,10 +83,19 @@ class I18n {
                 const fallbackResponse = await fetch(`${basePath}assets/locales/${this.fallbackLanguage}.json`);
                 if (fallbackResponse.ok) {
                     this.translations[this.fallbackLanguage] = await fallbackResponse.json();
+                } else {
+                    console.warn(`Failed to load fallback language ${this.fallbackLanguage}: ${fallbackResponse.status}`);
                 }
             }
         } catch (error) {
             console.error('Failed to load translations:', error);
+            // Use empty translations as fallback
+            if (!this.translations[this.currentLanguage]) {
+                this.translations[this.currentLanguage] = {};
+            }
+            if (!this.translations[this.fallbackLanguage]) {
+                this.translations[this.fallbackLanguage] = {};
+            }
         }
     }
 
@@ -197,6 +236,40 @@ class I18n {
 
     getSupportedLanguages() {
         return ['en', 'zh'];
+    }
+
+    isReady() {
+        return this.isInitialized && !this.isLoading;
+    }
+
+    async waitForReady() {
+        if (this.isReady()) {
+            return Promise.resolve();
+        }
+
+        if (this.loadingPromise) {
+            return this.loadingPromise;
+        }
+
+        return new Promise((resolve) => {
+            const checkReady = () => {
+                if (this.isReady()) {
+                    resolve();
+                } else {
+                    setTimeout(checkReady, 50);
+                }
+            };
+            checkReady();
+        });
+    }
+
+    // Utility method to get language display name
+    getLanguageDisplayName(lang) {
+        const names = {
+            'en': 'English',
+            'zh': '中文'
+        };
+        return names[lang] || lang;
     }
 }
 
